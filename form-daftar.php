@@ -63,20 +63,34 @@
     form {
         display: flex;
         flex-direction: column;
-        gap: 2rem;
-        margin-top: 2rem;
     }
 
-    input[type=text], select {
+    input[type="text"], 
+    input[type="file"],
+    textarea,
+    select {
         padding: 0.5rem;
         border-radius: 5px;
         border: 1px solid #ddd;
+        background-color: whitesmoke;
     }
 
-    input[type=submit] {
+    select {
+        width: max-content;
+    }
+    
+    label {
+        margin-top: 1rem;
+    }
+
+    input[type="submit"] {
         border: none;
-        padding: 0.5rem 1rem;
+        padding: 0.5rem 1.3rem;
         cursor: pointer;
+        background-color: #003A63;
+        color: white;
+        border-radius: 6px;
+        width: max-content;
     }
 </style>
 <body>
@@ -95,31 +109,55 @@
     </header>
 
     <main>
-        <h2>Registrasi Murid</h2>
-        <form action="proses-pendaftaran.php" method="POST">
+        <h3>Registrasi</h3>
+        <form action="proses-pendaftaran.php" method="POST" enctype="multipart/form-data">
+            <label for="file">Foto:</label>
+            <img id="image-preview" src="" alt="Image Preview" width="200" height="200" hidden><br>
+            <input type="file" id="image" name="image" accept="image/*">
+            <label for="nama">Nama</label>
             <input id="nama" type="text" name="nama" placeholder="Nama Lengkap" required />
-            <input id="alamat" type="text" name="alamat" placeholder="Alamat" required />
+            <label for="alamat">Alamat:</label>
+            <textarea id="alamat" type="text" name="alamat" placeholder="Alamat" required></textarea>
             
-            <div>
-                <label for="agama">Agama:</label><br/>
-                <select name="agama">
-                    <option value="Islam">Islam</option>
-                    <option value="Kristen">Kristen</option>
-                    <option value="Hindu">Hindu</option>
-                    <option value="Budha">Budha</option>
-                </select>
-            </div>
+            <label for="agama">Agama:</label>
+            <select name="agama">
+                <option value="Islam">Islam</option>
+                <option value="Kristen">Kristen</option>
+                <option value="Hindu">Hindu</option>
+                <option value="Budha">Budha</option>
+            </select>
     
+            <label for="jenis_kelamin">Jenis Kelamin:</label>
             <div>
-                <label for="jenis_kelamin">Jenis Kelamin:</label><br />
                 <input type="radio" name="jenis_kelamin" value="L" required /> Laki-laki <br/>
                 <input type="radio" name="jenis_kelamin" value="P" required /> Perempuan
             </div>
-    
-            <input id="sekolah_asal" name="sekolah_asal" type="text" placeholder="Sekolah Asal"> <br />
-    
+
+            <label for="alamat">Sekolah Asal:</label>
+            <input id="sekolah_asal" name="sekolah_asal" type="text" placeholder="Sekolah Asal" />
+            <br/>
             <input type="submit" value="Daftar" name="daftar" />
         </form>
     </main>
+
+    <script>
+        const image = document.getElementById('image');
+        const imagePreview = document.getElementById('image-preview');
+
+        image.addEventListener('change', function() {
+            const file = this.files[0];
+
+            if (file) {
+                const reader = new FileReader();
+
+                reader.onload = function() {
+                    imagePreview.src = reader.result;
+                    imagePreview.hidden = false;
+                }
+
+                reader.readAsDataURL(file);
+            }
+        });
+    </script>
 </body>
 </html>

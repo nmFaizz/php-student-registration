@@ -120,6 +120,7 @@
                         <thead>
                             <tr>
                                 <th>No</th>
+                                <th>Foto</th>
                                 <th>Nama</th>
                                 <th>Alamat</th>
                                 <th>Jenis Kelamin</th>
@@ -135,7 +136,8 @@
             
                                 while($siswa = mysqli_fetch_array($query)) {
                                     echo "<tr>";
-            
+                                    
+                                    echo "<td><img src='./assets/images/".$siswa['foto']."' width=100 height=100 /></td>";
                                     echo "<td>".$siswa['id']."</td>";
                                     echo "<td>".$siswa['nama']."</td>";
                                     echo "<td>".$siswa['alamat']."</td>";

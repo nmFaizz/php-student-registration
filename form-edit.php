@@ -83,20 +83,34 @@ if( mysqli_num_rows($query) < 1 ){
     form {
         display: flex;
         flex-direction: column;
-        gap: 2rem;
-        margin-top: 2rem;
     }
 
-    input[type=text], select {
+    input[type="text"], 
+    input[type="file"],
+    textarea,
+    select {
         padding: 0.5rem;
         border-radius: 5px;
         border: 1px solid #ddd;
+        background-color: whitesmoke;
     }
 
-    input[type=submit] {
+    select {
+        width: max-content;
+    }
+    
+    label {
+        margin-top: 1rem;
+    }
+
+    input[type="submit"] {
         border: none;
-        padding: 0.5rem 1rem;
+        padding: 0.5rem 1.3rem;
         cursor: pointer;
+        background-color: #003A63;
+        color: white;
+        border-radius: 6px;
+        width: max-content;
     }
 </style>
 <body>
@@ -116,33 +130,57 @@ if( mysqli_num_rows($query) < 1 ){
 
     <main>
         <h2>Edit Data Murid</h2>
-        <form action="proses-edit.php" method="POST">
+        <form action="proses-edit.php" method="POST" enctype="multipart/form-data">
             <input type="hidden" name="id" value="<?php echo $siswa['id'] ?>" />
+            <label for="file">Foto:</label>
+            <img id="image-preview" src="" alt="Image Preview" width="200" height="200" hidden><br>
+            <input type="file" id="image" name="image" accept="image/*">
+            <label for="nama">Nama</label>
             <input id="nama" value="<?php echo $siswa["nama"] ?>" type="text" name="nama" placeholder="Nama Lengkap" required />
-            <input id="alamat" value="<?php echo $siswa["alamat"] ?>" type="text" name="alamat" placeholder="Alamat" required />
+            <label for="alamat">Alamat:</label>
+            <textarea id="alamat" type="text" name="alamat" placeholder="Alamat" required><?php echo $siswa["alamat"] ?></textarea>
             
-            <div>
-                <label for="agama">Agama:</label><br/>
-                <?php $agama = $siswa['agama']; ?>
-                <select name="agama">
-                    <option <?php echo ($agama == 'Islam') ? "selected": "" ?>>Islam</option>
-                    <option <?php echo ($agama == 'Kristen') ? "selected": "" ?>>Kristen</option>
-                    <option <?php echo ($agama == 'Hindu') ? "selected": "" ?>>Hindu</option>
-                    <option <?php echo ($agama == 'Budha') ? "selected": "" ?>>Budha</option>
-                </select>
-            </div>
+            <label for="agama">Agama:</label>
+            <?php $agama = $siswa['agama']; ?>
+            <select name="agama">
+                <option <?php echo ($agama == 'Islam') ? "selected": "" ?>>Islam</option>
+                <option <?php echo ($agama == 'Kristen') ? "selected": "" ?>>Kristen</option>
+                <option <?php echo ($agama == 'Hindu') ? "selected": "" ?>>Hindu</option>
+                <option <?php echo ($agama == 'Budha') ? "selected": "" ?>>Budha</option>
+            </select>
     
+            <label for="jenis_kelamin">Jenis Kelamin:</label>
             <div>
-                <label for="jenis_kelamin">Jenis Kelamin:</label><br />
                 <?php $jk = $siswa['jenis_kelamin'] ?>
                 <input type="radio" name="jenis_kelamin" value="L" <?php echo ($jk == 'L') ? "checked": "" ?> required /> Laki-laki <br/>
                 <input type="radio" name="jenis_kelamin" value="P" <?php echo ($jk == 'P') ? "checked": "" ?> required /> Perempuan
             </div>
-    
-            <input id="sekolah_asal" name="sekolah_asal" type="text"  value="<?php echo $siswa['sekolah_asal'] ?>" placeholder="Sekolah Asal"> <br />
-    
+
+            <label for="alamat">Sekolah Asal:</label>
+            <input id="sekolah_asal" value="<?php echo $siswa['sekolah_asal'] ?>" name="sekolah_asal" type="text" placeholder="Sekolah Asal" required />
+            <br/>
             <input type="submit" value="Simpan" name="simpan" />
         </form>
     </main>
+
+    <script>
+        const image = document.getElementById('image');
+        const imagePreview = document.getElementById('image-preview');
+
+        image.addEventListener('change', function() {
+            const file = this.files[0];
+
+            if (file) {
+                const reader = new FileReader();
+
+                reader.onload = function() {
+                    imagePreview.src = reader.result;
+                    imagePreview.hidden = false;
+                }
+
+                reader.readAsDataURL(file);
+            }
+        });
+    </script>
 </body>
 </html>
